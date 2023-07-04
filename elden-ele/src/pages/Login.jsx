@@ -1,3 +1,5 @@
+//*****************************************
+//loinin kodunun üstüne ekleme yaptım satır 44-45te
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
@@ -40,6 +42,8 @@ function Login() {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("token", token);
         localStorage.setItem("email", response.data.email);
+        const { _id } = response.data;
+        localStorage.setItem("userId", _id);
         navigate("/");
       }
     } catch (error) {

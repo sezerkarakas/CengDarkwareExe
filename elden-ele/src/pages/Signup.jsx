@@ -1,3 +1,4 @@
+//loinin kodunun üzerine userId çekmek için ekleme yaptım satır 77-78 de
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
@@ -73,6 +74,8 @@ function Signup() {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("token", token);
         localStorage.setItem("email", addUserResponse.data.email);
+        const { _id } = addUserResponse.data;
+        localStorage.setItem("userId", _id);
         navigate("/");
       } else {
         toast.error("Kullanıcı oluşturulurken bir hata oluştu!");

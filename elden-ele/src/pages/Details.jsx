@@ -18,6 +18,8 @@ import ElectronicDetails from "./categorizedDetails/ElectronicDetails";
 
 function Details(props) {
   const [data, setData] = useState({});
+  const [imageUrl, setImageUrl] = useState("");
+
   const { id } = useParams();
   const { categoryName } = data;
   let categorizedDetailsComponent;
@@ -26,9 +28,14 @@ function Details(props) {
     const fetchData = async (req, res) => {
       try {
         const response = await axios.get(`http://localhost:3000/get/${id}`);
-        const data = response.data;
-        console.log(data);
-        setData(data);
+        setData(response.data);
+        const imageId = response.data.image;
+        console.log(imageId);
+        const imageResponse = await axios.get(
+          `http://localhost:3000/image/${imageId}`
+        );
+        const { image } = imageResponse.data;
+        setImageUrl(image);
       } catch (error) {
         console.log(error);
       }
@@ -102,7 +109,7 @@ function Details(props) {
               <img
                 className={`${activePhoto === Image1 ? "active" : ""}`}
                 onClick={() => handlePhoto(Image1)}
-                src={Image1}
+                src={imageUrl}
                 alt="Image1"
                 style={{ width: "90%", height: "90%" }}
               />

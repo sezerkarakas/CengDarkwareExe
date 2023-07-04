@@ -1,4 +1,4 @@
-const Advert = require("../models/AdvertModel");
+const { Advert, Item } = require("../models/AdvertModel");
 const Category = require("../models/CategoryModel");
 const Vehicle = require("../models/category_models/VehicleModel");
 const Residence = require("../models/category_models/ResidenceModel");
@@ -7,21 +7,9 @@ const Fashion = require("../models/category_models/FashionModel");
 const HomeAndGarden = require("../models/category_models/HomeAndGardenModel");
 const SecondHand = require("../models/category_models/SecondHandModel");
 const SparePart = require("../models/category_models/SparePartModel");
-const User = require("../models/UserModel");
-const Item = require("../models/ItemModel");
 
-const createImage = async (req, res) => {
-  const item = new Item(req.body);
-  try {
-    await item.save();
-    res.status(201).json(item);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+//tüm resimleri çeker
 const getImages = async (req, res) => {
-  console.log("get items");
   try {
     const item = await Item.find();
     res.status(200).json(item);
@@ -30,33 +18,43 @@ const getImages = async (req, res) => {
   }
 };
 
-const getAllAdverts = async (req, res) => {
+//bir tane resim çeker
+const getImage = async (req, res) => {
   try {
-    const adverts = await Advert.find({});
-
-    console.log("başarı");
-    res.json(adverts);
-    res.end();
+    const item = await Item.findById(req.params.id);
+    res.status(200).json(item);
   } catch (error) {
-    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 };
 
+// bütün ilanları çeker
+const getAllAdverts = async (req, res) => {
+  try {
+    const adverts = await Advert.find().populate("image").exec();
+    res.json(adverts);
+  } catch (error) {
+    console.error("Veri alınırken bir hata oluştu:", error);
+    res.status(500).json({ error: "Veri alınırken bir hata oluştu" });
+  }
+};
+
+// bir tane ilan çeker
 const getAdvert = async (req, res) => {
   try {
     const advert = await Advert.findById(req.params.id);
 
     res.json(advert);
-    res.end();
   } catch (error) {
     console.log(error);
   }
 };
 
+// kullanıcının ilanlarını çeker
 const getUsersAdverts = async (req, res) => {
   try {
-    const kullaniciId = req.params.kullaniciId;
-    const ilanlar = await Advert.find({ userId: kullaniciId });
+    const userId = req.params.id;
+    const ilanlar = await Advert.find({ userId });
 
     res.json(ilanlar);
   } catch (err) {
@@ -65,78 +63,52 @@ const getUsersAdverts = async (req, res) => {
   }
 };
 
-const newVehicleAdvert = async (req, res) => {
+// yeni ilan yükleme kodu
+const newAdvert = async (req, res) => {
+  const item = new Item(req.body);
   try {
-    const v = await Vehicle.create(req.body);
+    await item.save();
+    const { categoryName, ...advertFields } = req.body;
 
-    res.json(v);
-    res.end();
+    // Kategoriye göre ilgili modeli seçme
+    let categoryModel;
+    switch (categoryName) {
+      case "Vasita":
+        categoryModel = Vehicle;
+        break;
+      case "Emlak":
+        categoryModel = Residence;
+        break;
+      case "Elektronik":
+        categoryModel = Electronic;
+        break;
+      case "Moda":
+        categoryModel = Fashion;
+        break;
+      case "EvBahce":
+        categoryModel = HomeAndGarden;
+        break;
+      case "İkinciEl" || "IkinciEl":
+        categoryModel = SecondHand;
+        break;
+      case "YedekParca":
+        categoryModel = SparePart;
+        break;
+      default:
+        return res.status(400).json({ error: "Geçersiz kategori" });
+    }
+
+    // İlanı kaydetme
+    const newCategoryItem = new categoryModel({ ...req.body, image: item._id });
+    await newCategoryItem.save();
+
+    res.json(newCategoryItem);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Bir hata oluştu" });
   }
 };
-const newResidenceAdvert = async (req, res) => {
-  try {
-    const v = await Residence.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-const newElectronicAdvert = async (req, res) => {
-  try {
-    const v = await Electronic.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-const newFashionAdvert = async (req, res) => {
-  try {
-    const v = await Fashion.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const newHomeAndGardenAdvert = async (req, res) => {
-  try {
-    const v = await HomeAndGarden.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-const newSecondHandAdvert = async (req, res) => {
-  try {
-    const v = await SecondHand.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-const newSparePartAdvert = async (req, res) => {
-  try {
-    const v = await SparePart.create(req.body);
-
-    res.json(v);
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+//ilan silme
 const deleteAdvert = async (req, res) => {
   try {
     await Advert.findByIdAndDelete(req.params.id);
@@ -147,6 +119,7 @@ const deleteAdvert = async (req, res) => {
   }
 };
 
+//ilan güncelleme(henüz bitmedi)
 const updateAdvert = async (req, res) => {
   try {
     await Advert.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -157,53 +130,13 @@ const updateAdvert = async (req, res) => {
   }
 };
 
-const newCategory = async (req, res) => {
-  try {
-    await Category.create(req.body);
-    console.log("kategori başarıyla eklendi!");
-    const cat = await Category.find({});
-
-    res.end();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const uploadImage = (req, res) => {
-  const photoPath = req.body;
-  const photoData = fs.readFileSync(photoPath);
-
-  const newPhoto = new Image({
-    name: "my photo",
-    data: photoData,
-  });
-
-  // Fotoğrafı kaydedin
-  newPhoto.save((err) => {
-    if (err) {
-      console.error(err);
-      // Hata yönetimi yapabilirsiniz
-    } else {
-      console.log("Fotoğraf başarıyla kaydedildi.");
-      // Başarılı kaydetme işlemini takip eden diğer işlemleri yapabilirsiniz
-    }
-  });
-};
-
 module.exports = {
   getAdvert,
   getAllAdverts,
-  newCategory,
-  newVehicleAdvert,
-  newResidenceAdvert,
-  newElectronicAdvert,
-  newFashionAdvert,
-  newSecondHandAdvert,
-  newHomeAndGardenAdvert,
-  newSparePartAdvert,
   deleteAdvert,
   updateAdvert,
   getUsersAdverts,
-  createImage,
   getImages,
+  getImage,
+  newAdvert,
 };

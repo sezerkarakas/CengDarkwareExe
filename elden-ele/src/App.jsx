@@ -10,7 +10,6 @@ import Details from "./pages/Details";
 import MessageInterface from "./pages/MessageInterface";
 import ProductSearch from "./pages/ProductSearch";
 import ChangePassword from "./pages/ChangePassword";
-import App12 from "./pages/Test";
 import CategoriesPage from "./pages/CategoriesPage";
 
 function App() {
@@ -32,7 +31,6 @@ function App() {
         <Route exact path="/message" element={<MessageInterface />} />
         <Route exact path="/search" element={<ProductSearch />} />
         <Route exact path="/changepassword" element={<ChangePassword />} />
-        <Route exact path="/test" element={<App12 />} />
       </Routes>
     </BrowserRouter>
   );

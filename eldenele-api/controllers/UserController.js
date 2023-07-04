@@ -50,6 +50,7 @@ module.exports.addUser = async (req, res) => {
         user: savedUser,
         token: token,
         email: email,
+        _id: savedUser._id,
       });
     }
   } catch (error) {
@@ -226,7 +227,7 @@ module.exports.login = async (req, res) => {
     }
     // JWT oluşturma
     const token = jwt.sign({ email: user.email }, "secretKey");
-    res.json({ token, email });
+    res.json({ token, email, _id: user._id });
   } catch (error) {
     console.error("Giriş hatası:", error);
     res.status(500).json({ error: "Server hatası" });

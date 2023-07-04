@@ -9,7 +9,6 @@ const {
   changePassword,
   checkPassword,
   getUser,
-  getProfile,
 } = require("../controllers/UserController");
 const advertController = require("../controllers/AdvertController");
 
@@ -24,21 +23,21 @@ router.post("/checkName", checkName);
 router.post("/login", login);
 router.put("/changepassword/:email", changePassword);
 router.post("/checkPassword", checkPassword);
-router.get("/getAll", advertController.getAllAdverts);
-router.get("/get/:id", advertController.getAdvert);
-router.post("/category", advertController.newCategory);
-router.post("/vehicle", advertController.newVehicleAdvert);
-router.post("/residence", advertController.newResidenceAdvert);
-router.post("/electronic", advertController.newElectronicAdvert);
-router.post("/fashion", advertController.newFashionAdvert);
-router.post("/homeAndGarden", advertController.newHomeAndGardenAdvert);
-router.post("/secondHand", advertController.newSecondHandAdvert);
-router.post("/sparePart", advertController.newSparePartAdvert);
-router.delete("/delete/:id", advertController.deleteAdvert);
-router.put("/update/:id", advertController.updateAdvert);
-router.get("/ilanlar/:id", advertController.getUsersAdverts);
 router.get("/getUser/:id", getUser);
-router.get("/profile", getProfile);
-router.post("/image", advertController.createImage);
+//ilanları listeleme
+router.get("/getAll", advertController.getAllAdverts);
+//tek ilan getirme
+router.get("/get/:id", advertController.getAdvert);
+//yeni ilan yükleme
+router.post("/newadd", advertController.newAdvert);
+//ilan silme
+router.delete("/delete/:id", advertController.deleteAdvert);
+//ilan güncelleme(güncellenmedi henüz)
+router.put("/update/:id", advertController.updateAdvert);
+//kullanıcının ilanlarını getirme
+router.get("/ilanlar/:id", advertController.getUsersAdverts);
+//bütün resimleri çekme
 router.get("/image", advertController.getImages);
+//bir tane resim çekme
+router.get("/image/:id", advertController.getImage);
 module.exports = router;

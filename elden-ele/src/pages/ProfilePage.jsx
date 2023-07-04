@@ -13,10 +13,16 @@ import { useParams } from "react-router-dom";
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState({});
   const [data, setData] = useState([{}]);
-
+  //*****************************************
+  //kullanıcı idsi
+  const userId = localStorage.getItem("userId");
+//*****************************************
+  //kullanıcı bilgileri
   const fetchProfile = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/profile");
+      const response = await axios.get(
+        `http://localhost:3000/getUser/${userId}`
+      );
       setProfileData(response.data);
     } catch (error) {
       console.log(error);
@@ -44,10 +50,10 @@ const ProfilePage = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+//***********************************************************************
+  //kullanıcının yüklemiş olduğu ilanları çekme
   const fetchData = async () => {
     try {
-      const userId = profileData.id;
       const response = await axios.get(
         `http://localhost:3000/ilanlar/${userId}`
       );
@@ -96,8 +102,9 @@ const ProfilePage = () => {
             <ProfileNavbar />
           </ProfileHeader>
           <ProfileImage src={Image3} alt="Profile Image" />
+          {/* kullanıcı bilgileri çekme */}
           <ProfileInfo>
-            <ProfileName>{profileData.kullanici_adi}</ProfileName>
+            <ProfileName>{profileData.firstName}</ProfileName>
             <ProfileDescription>{profileData.email}</ProfileDescription>
           </ProfileInfo>
 

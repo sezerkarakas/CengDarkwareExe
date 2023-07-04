@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Category = require("../CategoryModel");
-const Advert = require("../AdvertModel");
+const {Advert} = require("../AdvertModel");
 
 const SparePartSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category" },
