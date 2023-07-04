@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 
 const FavoriteSearch = ({ text }) => {
+  const [close, setClose] = useState(true);
+  const closeHandler = () => {
+    setClose(false);
+  };
+
+
   return (
-    <div style={styles.container}>
-      <div style={styles.circular}>
-        <span style={styles.text}>{text}</span>
+    <div className="container">
+      <div className="d-flex">
+        {close && (
+          <button
+            style={{ borderColor: "black", borderRadius: "25px" }}
+            type="button"
+            className="btn btn-light"
+          >
+            son arama
+            <span
+              style={{ marginLeft: "5px" }}
+              className="btn-close"
+              onClick={closeHandler}
+            ></span>
+          </button>
+        )}
       </div>
     </div>
   );

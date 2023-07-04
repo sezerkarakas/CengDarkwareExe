@@ -168,7 +168,8 @@ function Home() {
           <div className="buttons flex"></div>
         </div>
       </div>
-      <FavoriteSearch text={"hello"} />
+        <FavoriteSearch text={"hello"} />
+
       <MainContent>
         <ToastContainer />
         <Sidebar />

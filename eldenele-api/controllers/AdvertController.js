@@ -8,6 +8,14 @@ const HomeAndGarden = require("../models/category_models/HomeAndGardenModel");
 const SecondHand = require("../models/category_models/SecondHandModel");
 const SparePart = require("../models/category_models/SparePartModel");
 
+const createImage = async (req, res) => {
+  const item = new Item(req.body);
+  try {
+    await item.save();
+    res.status(201).json(item);
+  } catch (error) {}
+};
+
 //tüm resimleri çeker
 const getImages = async (req, res) => {
   try {
@@ -45,6 +53,16 @@ const getAdvert = async (req, res) => {
     const advert = await Advert.findById(req.params.id);
 
     res.json(advert);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getByCategory = async (req, res) => {
+  const { categoryName } = req.params;
+  try {
+    const adverts = await Advert.find({ categoryName: categoryName });
+    res.json(adverts);
   } catch (error) {
     console.log(error);
   }
@@ -136,7 +154,9 @@ module.exports = {
   deleteAdvert,
   updateAdvert,
   getUsersAdverts,
+  createImage,
   getImages,
   getImage,
   newAdvert,
+  getByCategory,
 };

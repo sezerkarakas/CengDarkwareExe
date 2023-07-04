@@ -40,4 +40,8 @@ router.get("/ilanlar/:id", advertController.getUsersAdverts);
 router.get("/image", advertController.getImages);
 //bir tane resim çekme
 router.get("/image/:id", advertController.getImage);
+//kategoriye göre ilan listeleme
+router.get("/:categoryName", advertController.getByCategory);
+//resim yükleme
+router.post("/image", advertController.createImage);
 module.exports = router;
