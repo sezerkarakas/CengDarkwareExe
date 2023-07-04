@@ -4,15 +4,13 @@ import Navbar from "../components/Navbar";
 import backgroundImage from "../assets/logo1.jpg";
 import Sidebar from "../components/Sidebar";
 import Card from "../components/Card";
-import Image1 from "../assets/ilan1.jpg";
-import Image2 from "../assets/ilan2.jpg";
-import Image3 from "../assets/ilan3.jpg";
 import Footer from "../components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { firebaseAuth } from "../utils/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
+import FavoriteSearch from "../components/FavoriteSearch";
 
 function Home() {
   const [data, setData] = useState([{}]);
@@ -23,9 +21,25 @@ function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/getAll");
-      setData(response.data);
-      console.log(response.data);
+      const response = await fetch("http://localhost:5000/getAll");
+      if (response.ok) {
+        const adverts = await response.json();
+
+        for (const advert of adverts) {
+          const imageResponse = await fetch(
+            `http://localhost:3000/image/${advert.image}`
+          );
+          if (imageResponse.ok) {
+            const images = await imageResponse.json();
+            advert.image = images;
+          }
+        }
+
+        setData(adverts);
+        console.log(adverts);
+      } else {
+        console.error("Veri alınırken bir hata oluştu:", response.statusText);
+      }
     } catch (error) {
       console.error("Veri alınırken bir hata oluştu:", error);
     }
@@ -154,6 +168,7 @@ function Home() {
           <div className="buttons flex"></div>
         </div>
       </div>
+      <FavoriteSearch text={"hello"} />
       <MainContent>
         <ToastContainer />
         <Sidebar />
