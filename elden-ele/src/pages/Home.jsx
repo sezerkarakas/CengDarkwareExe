@@ -29,24 +29,35 @@ function Home() {
       const response = await fetch("http://localhost:5000/getAll");
       if (response.ok) {
         const adverts = await response.json();
-        for (const advert of adverts) {
-          const imageResponse = await fetch(
-            `http://localhost:3000/image/${advert.image}`
-          );
-          if (imageResponse.ok) {
-            const images = await imageResponse.json();
-            advert.image = images;
-          }
-        }
-
-        setData(adverts);
-        console.log(adverts);
+        const advertsWithImages = await fetchImagesForAds(adverts);
+        setData(advertsWithImages);
       } else {
         console.error("Veri alınırken bir hata oluştu:", response.statusText);
       }
     } catch (error) {
       console.error("Veri alınırken bir hata oluştu:", error);
     }
+  };
+
+  const fetchImagesForAds = async (ads) => {
+    const adsWithImages = await Promise.all(
+      ads.map(async (ad) => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/image/${ad.image}`
+          );
+          if (response.ok) {
+            const images = await response.json();
+            return { ...ad, images };
+          }
+        } catch (error) {
+          console.error("Resim alınırken bir hata oluştu:", error);
+        }
+        return ad;
+      })
+    );
+
+    return adsWithImages;
   };
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (currentUser) {
@@ -116,7 +127,7 @@ function Home() {
                   key={item._id}
                   _id={item._id}
                   title={item.title}
-                  image={item.image[0]}
+                  image={item.image.image}
                   price={item.price}
                   isLiked={false}
                 />

@@ -12,11 +12,11 @@ import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState({});
-  const [data, setData] = useState([{}]);
+  const [data, setData] = useState([]);
   //*****************************************
   //kullanıcı idsi
   const userId = localStorage.getItem("userId");
-//*****************************************
+  //*****************************************
   //kullanıcı bilgileri
   const fetchProfile = async () => {
     try {
@@ -44,22 +44,40 @@ const ProfilePage = () => {
         console.error("İlan silinirken bir hata oluştu:", error);
       });
   };
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-  useEffect(() => {
-    fetchData();
-  }, []);
-//***********************************************************************
+
+  //***********************************************************************
   //kullanıcının yüklemiş olduğu ilanları çekme
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:3000/ilanlar/${userId}`
       );
-      setData(response.data);
+      if (response.status === 200) {
+        const ilanlar = response.data;
+        const ilanlarWithImages = await Promise.all(
+          ilanlar.map(async (ilan) => {
+            const imageResponse = await axios.get(
+              `http://localhost:3000/image/${ilan.image}`
+            );
+            if (imageResponse.status === 200) {
+              const images = imageResponse.data;
+              ilan.image = images;
+              return ilan;
+            } else {
+              console.error(
+                "Resim alınırken bir hata oluştu:",
+                imageResponse.statusText
+              );
+              return ilan;
+            }
+          })
+        );
+        setData(ilanlarWithImages);
+      } else {
+        console.error("İlanlar alınamadı:", response.statusText);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("İlanlar alınamadı:", error);
     }
   };
 
@@ -72,11 +90,11 @@ const ProfilePage = () => {
   /*
     const ListingCard = ({ id, title, image, price }) => {
       const history = useHistory();
-    
+      
       const handleDelete = () => {
         // İlanı silme işlemleri burada yapılır
       };
-    
+      
       const handleUpdate = () => {
         history.push('/update-page'); // UpdatePage sayfasına yönlendirme
       };
@@ -91,7 +109,11 @@ const ProfilePage = () => {
         </StyledListingCard>
       );
     };
-  */
+    */
+  useEffect(() => {
+    fetchProfile();
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -127,7 +149,7 @@ const ProfilePage = () => {
               <ListingsContainer className="d-flex justify-content-between">
                 {data.map((item) => (
                   <ListingCard key={item._id}>
-                    <ListingImage src={item.image} alt={item.title} />
+                    <ListingImage src={item.image.image} alt={item.title} />
                     <ListingTitle>{item.title}</ListingTitle>
                     <ListingDescription>{item.price}</ListingDescription>
                     <DeleteButton onClick={() => ilaniSil(item._id)}>

@@ -26,6 +26,45 @@ function CategoriesPage() {
     fetchIlanlar();
   }, [categoryName]);
 
+  useEffect(() => {
+    const fetchIlanlar = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/${categoryName}`);
+        const data = await response.json();
+        const ilanlarWithImages = await fetchImagesForIlanlar(data);
+        setIlanlar(ilanlarWithImages);
+      } catch (error) {
+        console.error("İlanlar alınamadı:", error);
+      }
+    };
+
+    fetchIlanlar();
+  }, [categoryName]);
+
+  const fetchImagesForIlanlar = async (ilanlar) => {
+    const ilanlarWithImages = [];
+    for (const ilan of ilanlar) {
+      try {
+        const imageResponse = await fetch(
+          `http://localhost:3000/image/${ilan.image}`
+        );
+        if (imageResponse.ok) {
+          const images = await imageResponse.json();
+          ilan.image = images;
+          ilanlarWithImages.push(ilan);
+        } else {
+          console.error(
+            "Resim alınırken bir hata oluştu:",
+            imageResponse.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Resim alınırken bir hata oluştu:", error);
+      }
+    }
+    return ilanlarWithImages;
+  };
+
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
@@ -76,7 +115,7 @@ function CategoriesPage() {
                   key={item._id}
                   _id={item._id}
                   title={item.title}
-                  image={item.image}
+                  image={item.image.image}
                   price={item.price}
                 />
               ))}
