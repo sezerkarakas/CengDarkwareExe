@@ -47,14 +47,8 @@ function NewAdvert() {
     durumu: "sifir",
     garanti: "evet",
   });
-  const handleCarChange = (e) => {
-    const { name, value } = e.target;
-    setCar((prevCar) => ({
-      ...prevCar,
-      [name]: value,
-    }));
-  };
-  const [residence, SetResidence] = useState({
+
+  const [residence, setResidence] = useState({
     odaSayisi: "",
     binaYasi: 0,
     katSayisi: 0,
@@ -65,13 +59,7 @@ function NewAdvert() {
     siteIcerisinde: "hayir",
     aidatBilgileri: "",
   });
-  const handleResidenceChange = (e) => {
-    const { name, value } = e.target;
-    SetResidence((prevRes) => ({
-      ...prevRes,
-      [name]: value,
-    }));
-  };
+
   const [homeAndGarden, setHomeAndGarden] = useState({
     malzeme: "",
     turu: "",
@@ -80,13 +68,7 @@ function NewAdvert() {
     durumu: "sifir",
     garanti: "evet",
   });
-  const handleHomeAndGardenChange = (e) => {
-    const { name, value } = e.target;
-    setHomeAndGarden((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+
   const [elektronik, setElektronik] = useState({
     marka: "",
     model: "",
@@ -94,13 +76,6 @@ function NewAdvert() {
     renk: "",
     garanti: "evet",
   });
-  const handleElektronikChange = (e) => {
-    const { name, value } = e.target;
-    setElektronik((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const [moda, setModa] = useState({
     marka: "",
@@ -109,13 +84,6 @@ function NewAdvert() {
     tarz: "sport",
     malzeme: "",
   });
-  const handleModaChange = (e) => {
-    const { name, value } = e.target;
-    setModa((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const [yedekParca, setYedekParca] = useState({
     marka: "",
@@ -124,13 +92,6 @@ function NewAdvert() {
     parcaNumarasi: "",
     durumu: "yeni",
   });
-  const handleYedekParca = (e) => {
-    const { name, value } = e.target;
-    setYedekParca((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const [ikinciEl, setIkinciEl] = useState({
     marka: "",
@@ -139,12 +100,62 @@ function NewAdvert() {
     takas: "evet",
   });
 
-  const handleIkinciEl = (e) => {
+  const handleFieldChange = (e) => {
     const { name, value } = e.target;
-    setIkinciEl((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    switch (categoryName) {
+      case "İkinciEl" || "IkinciEl":
+        setIkinciEl((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        break;
+
+      case "YedekParca":
+        setYedekParca((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        break;
+
+      case "Moda":
+        setModa((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        break;
+
+      case "Elektronik":
+        setElektronik((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        break;
+
+      case "EvBahce":
+        setHomeAndGarden((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        break;
+
+      case "Vasita" || "Vasıta":
+        setCar((prevCar) => ({
+          ...prevCar,
+          [name]: value,
+        }));
+        break;
+
+      case "Emlak" || "emlak":
+        setResidence((prevRes) => ({
+          ...prevRes,
+          [name]: value,
+        }));
+        break;
+
+      default:
+        console.log("Geçersiz kategori");
+    }
   };
 
   window.onscroll = () => {
@@ -445,7 +456,7 @@ function NewAdvert() {
                     type="number"
                     name="odaSayisi"
                     value={residence.odaSayisi}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="odaSayisi"
                   />
                 </div>
@@ -456,7 +467,7 @@ function NewAdvert() {
                     type="number"
                     name="binaYasi"
                     value={residence.binaYasi}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="binaYasi"
                   />
                 </div>
@@ -467,7 +478,7 @@ function NewAdvert() {
                     type="number"
                     name="katSayisi"
                     value={residence.katSayisi}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="katSayisi"
                   />
                 </div>
@@ -478,7 +489,7 @@ function NewAdvert() {
                     type="text"
                     name="isitma"
                     value={residence.isitma}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="isitma"
                   />
                 </div>
@@ -489,7 +500,7 @@ function NewAdvert() {
                     type="number"
                     name="banyoSayisi"
                     value={residence.banyoSayisi}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="banyoSayisi"
                   />
                 </div>
@@ -499,7 +510,7 @@ function NewAdvert() {
                   <select
                     name="balkon"
                     value={residence.balkon}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="balkon"
                   >
                     <option value="evet">Evet</option>
@@ -512,7 +523,7 @@ function NewAdvert() {
                   <select
                     name="esyali"
                     value={residence.esyali}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="esyali"
                   >
                     <option value="evet">Evet</option>
@@ -525,7 +536,7 @@ function NewAdvert() {
                   <select
                     name="siteIcerisinde"
                     value={residence.siteIcerisinde}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="siteIcerisinde"
                   >
                     <option value="evet">Evet</option>
@@ -539,7 +550,7 @@ function NewAdvert() {
                     type="text"
                     name="aidatBilgileri"
                     value={residence.aidatBilgileri}
-                    onChange={handleResidenceChange}
+                    onChange={handleFieldChange}
                     id="aidatBilgileri"
                   />
                 </div>
@@ -553,7 +564,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={car.marka}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -564,7 +575,7 @@ function NewAdvert() {
                     type="text"
                     name="seri"
                     value={car.seri}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="seri"
                   />
                 </div>
@@ -575,7 +586,7 @@ function NewAdvert() {
                     type="text"
                     name="model"
                     value={car.model}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="model"
                   />
                 </div>
@@ -586,7 +597,7 @@ function NewAdvert() {
                     type="number"
                     name="yil"
                     value={car.yil}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="yil"
                   />
                 </div>
@@ -597,7 +608,7 @@ function NewAdvert() {
                     type="text"
                     name="vites"
                     value={car.vites}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="vites"
                   />
                 </div>
@@ -607,7 +618,7 @@ function NewAdvert() {
                   <select
                     name="agirhasarkayit"
                     value={car.agirhasarkayit}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="agirhasarkayit"
                   >
                     <option value="evet">Evet</option>
@@ -621,7 +632,7 @@ function NewAdvert() {
                     type="text"
                     name="kasatipi"
                     value={car.kasatipi}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="kasatipi"
                   />
                 </div>
@@ -632,7 +643,7 @@ function NewAdvert() {
                     type="text"
                     name="motorgucu"
                     value={car.motorgucu}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="motorgucu"
                   />
                 </div>
@@ -643,7 +654,7 @@ function NewAdvert() {
                     type="text"
                     name="motorhacmi"
                     value={car.motorhacmi}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="motorhacmi"
                   />
                 </div>
@@ -654,7 +665,7 @@ function NewAdvert() {
                     type="text"
                     name="renk"
                     value={car.renk}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="renk"
                   />
                 </div>
@@ -664,7 +675,7 @@ function NewAdvert() {
                   <select
                     name="durumu"
                     value={car.durumu}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="durumu"
                   >
                     <option value="sifir">Sıfır</option>
@@ -677,7 +688,7 @@ function NewAdvert() {
                   <select
                     name="garanti"
                     value={car.garanti}
-                    onChange={handleCarChange}
+                    onChange={handleFieldChange}
                     id="garanti"
                   >
                     <option value="evet">Evet</option>
@@ -694,7 +705,7 @@ function NewAdvert() {
                     type="text"
                     name="malzeme"
                     value={homeAndGarden.malzeme}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="malzeme"
                   />
                 </div>
@@ -705,7 +716,7 @@ function NewAdvert() {
                     type="text"
                     name="turu"
                     value={homeAndGarden.turu}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="turu"
                   />
                 </div>
@@ -716,7 +727,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={homeAndGarden.marka}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -727,7 +738,7 @@ function NewAdvert() {
                     type="text"
                     name="renk"
                     value={homeAndGarden.renk}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="renk"
                   />
                 </div>
@@ -737,7 +748,7 @@ function NewAdvert() {
                   <select
                     name="durumu"
                     value={homeAndGarden.durumu}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="durumu"
                   >
                     <option value="sifir">Sıfır</option>
@@ -750,7 +761,7 @@ function NewAdvert() {
                   <select
                     name="garanti"
                     value={homeAndGarden.garanti}
-                    onChange={handleHomeAndGardenChange}
+                    onChange={handleFieldChange}
                     id="garanti"
                   >
                     <option value="evet">Evet</option>
@@ -767,7 +778,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={elektronik.marka}
-                    onChange={handleElektronikChange}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -778,7 +789,7 @@ function NewAdvert() {
                     type="text"
                     name="model"
                     value={elektronik.model}
-                    onChange={handleElektronikChange}
+                    onChange={handleFieldChange}
                     id="model"
                   />
                 </div>
@@ -788,7 +799,7 @@ function NewAdvert() {
                   <select
                     name="turu"
                     value={elektronik.turu}
-                    onChange={handleElektronikChange}
+                    onChange={handleFieldChange}
                     id="turu"
                   >
                     <option value="tablet">Tablet</option>
@@ -806,7 +817,7 @@ function NewAdvert() {
                     type="text"
                     name="renk"
                     value={elektronik.renk}
-                    onChange={handleElektronikChange}
+                    onChange={handleFieldChange}
                     id="renk"
                   />
                 </div>
@@ -816,7 +827,7 @@ function NewAdvert() {
                   <select
                     name="garanti"
                     value={elektronik.garanti}
-                    onChange={handleElektronikChange}
+                    onChange={handleFieldChange}
                     id="garanti"
                   >
                     <option value="evet">Evet</option>
@@ -833,7 +844,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={moda.marka}
-                    onChange={handleModaChange}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -843,7 +854,7 @@ function NewAdvert() {
                   <select
                     name="turu"
                     value={moda.turu}
-                    onChange={handleModaChange}
+                    onChange={handleFieldChange}
                     id="turu"
                   >
                     <option value="ustGiyim">Üst Giyim</option>
@@ -861,7 +872,7 @@ function NewAdvert() {
                     type="text"
                     name="renk"
                     value={moda.renk}
-                    onChange={handleModaChange}
+                    onChange={handleFieldChange}
                     id="renk"
                   />
                 </div>
@@ -871,7 +882,7 @@ function NewAdvert() {
                   <select
                     name="tarz"
                     value={moda.tarz}
-                    onChange={handleModaChange}
+                    onChange={handleFieldChange}
                     id="tarz"
                   >
                     <option value="casual">Günlük</option>
@@ -886,7 +897,7 @@ function NewAdvert() {
                     type="text"
                     name="malzeme"
                     value={moda.malzeme}
-                    onChange={handleModaChange}
+                    onChange={handleFieldChange}
                     id="malzeme"
                   />
                 </div>
@@ -900,7 +911,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={yedekParca.marka}
-                    onChange={handleYedekParca}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -911,7 +922,7 @@ function NewAdvert() {
                     type="text"
                     name="model"
                     value={yedekParca.model}
-                    onChange={handleYedekParca}
+                    onChange={handleFieldChange}
                     id="model"
                   />
                 </div>
@@ -922,7 +933,7 @@ function NewAdvert() {
                     type="text"
                     name="parcaAdi"
                     value={yedekParca.parcaAdi}
-                    onChange={handleYedekParca}
+                    onChange={handleFieldChange}
                     id="parcaAdi"
                   />
                 </div>
@@ -933,7 +944,7 @@ function NewAdvert() {
                     type="text"
                     name="parcaNumarasi"
                     value={yedekParca.parcaNumarasi}
-                    onChange={handleYedekParca}
+                    onChange={handleFieldChange}
                     id="parcaNumarasi"
                   />
                 </div>
@@ -943,7 +954,7 @@ function NewAdvert() {
                   <select
                     name="durumu"
                     value={yedekParca.durumu}
-                    onChange={handleYedekParca}
+                    onChange={handleFieldChange}
                     id="durumu"
                   >
                     <option value="yeni">Yeni</option>
@@ -960,7 +971,7 @@ function NewAdvert() {
                     type="text"
                     name="marka"
                     value={ikinciEl.marka}
-                    onChange={handleIkinciEl}
+                    onChange={handleFieldChange}
                     id="marka"
                   />
                 </div>
@@ -971,7 +982,7 @@ function NewAdvert() {
                     type="text"
                     name="model"
                     value={ikinciEl.model}
-                    onChange={handleIkinciEl}
+                    onChange={handleFieldChange}
                     id="model"
                   />
                 </div>
@@ -981,7 +992,7 @@ function NewAdvert() {
                   <select
                     name="durumu"
                     value={ikinciEl.durumu}
-                    onChange={handleIkinciEl}
+                    onChange={handleFieldChange}
                     id="durumu"
                   >
                     <option value="iyi">İyi</option>
@@ -995,7 +1006,7 @@ function NewAdvert() {
                   <select
                     name="takas"
                     value={ikinciEl.takas}
-                    onChange={handleIkinciEl}
+                    onChange={handleFieldChange}
                     id="takas"
                   >
                     <option value="evet">Evet</option>
