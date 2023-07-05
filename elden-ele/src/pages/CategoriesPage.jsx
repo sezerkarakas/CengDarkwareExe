@@ -1,47 +1,35 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import Image1 from "../assets/ilan1.jpg";
-import Image2 from "../assets/ilan2.jpg";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 import backgroundImage from "../assets/logo1.jpg";
 import Footer from "../components/Footer";
-import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function CategoriesPage({ categoryName }) {
-  const [data, setData] = useState([{}]);
+function CategoriesPage() {
+  const [ilanlar, setIlanlar] = useState([]);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { categoryName } = useParams();
+
+  useEffect(() => {
+    const fetchIlanlar = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/${categoryName}`);
+        const data = await response.json();
+        setIlanlar(data);
+      } catch (error) {
+        console.error("İlanlar alınamadı:", error);
+      }
+    };
+
+    fetchIlanlar();
+  }, [categoryName]);
 
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/getAll");
-      if (response.data.categoryName == categoryName) {
-        setData(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const links = [
-    { name: "Emlak", link: "/category/emlak" },
-    { name: "Vasıta", link: "/category/vasita" },
-    { name: "Ev & Bahçe", link: "/category/evbahce" },
-    { name: "Elektronik", link: "/category/elektronik" },
-    { name: "Moda", link: "/category/moda" },
-    { name: "Yedek Parça", link: "/category/yedekparca" },
-    { name: "İkinci el", link: "/category/ikinciel" },
-  ];
 
   function Title(links) {
     return (
@@ -61,56 +49,6 @@ function CategoriesPage({ categoryName }) {
     );
   }
 
-  const cards = [
-    {
-      id: "11",
-      title: "İlan 1",
-      image: Image1,
-      price: "100 TL",
-    },
-    {
-      id: "22",
-      title: "İlan 2",
-      image: Image2,
-      price: "200 TL",
-    },
-    {
-      id: "33",
-      title: "İlan 3",
-      image: Image1,
-      price: "200 TL",
-    },
-    {
-      id: "44",
-      title: "İlan 4",
-      image: Image2,
-      price: "200 TL",
-    },
-    {
-      id: "55",
-      title: "İlan 5",
-      image: Image1,
-      price: "200 TL",
-    },
-    {
-      id: "66",
-      title: "İlan 6",
-      image: Image2,
-      price: "200 TL",
-    },
-    {
-      id: "77",
-      title: "İlan 6",
-      image: Image1,
-      price: "200 TL",
-    },
-    {
-      id: "88",
-      title: "İlan 6",
-      image: Image2,
-      price: "200 TL",
-    },
-  ];
   return (
     <>
       <Navbar isScrolled={isScrolled} />
@@ -131,11 +69,11 @@ function CategoriesPage({ categoryName }) {
           <Sidebar />
 
           <div className="container">
-            <Title name={`${links[1].name} Kategorisi`} />
+            <Title name={`${categoryName} Kategorisi`} />
             <CardsContainer>
-              {data.map((item) => (
+              {ilanlar.map((item) => (
                 <Card
-                  key={item.id}
+                  key={item._id}
                   _id={item._id}
                   title={item.title}
                   image={item.image}

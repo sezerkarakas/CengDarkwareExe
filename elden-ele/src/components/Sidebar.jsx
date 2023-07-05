@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   const links = [
-    { name: "Emlak", link: "/category" },
-    { name: "Vasıta", link: "/category" },
-    { name: "Ev & Bahçe", link: "/category" },
-    { name: "Elektronik", link: "/category" },
-    { name: "Moda", link: "/category" },
-    { name: "Yedek Parça", link: "/category" },
-    { name: "İkinci el", link: "/category" },
+    { name: "Emlak", link: "/Emlak" },
+    { name: "Vasıta", link: "/Vasita" },
+    { name: "Ev & Bahçe", link: "/EvBahce" },
+    { name: "Elektronik", link: "/Elektronik" },
+    { name: "Moda", link: "/Moda" },
+    { name: "Yedek Parça", link: "/YedekParca" },
+    { name: "İkinci el", link: "/İkinciEl" },
   ];
   const linkStyle = {
     color: "inherit",

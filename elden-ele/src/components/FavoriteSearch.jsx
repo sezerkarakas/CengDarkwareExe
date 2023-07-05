@@ -1,29 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const FavoriteSearch = ({ text }) => {
-  const [close, setClose] = useState(true);
-  const closeHandler = () => {
-    setClose(false);
+const FavoriteSearch = () => {
+  const [searches, setSearches] = useState([]);
+
+  const handleSearch = (word) => {
+    // Arama ile ilgili işlemleri burada gerçekleştirin
+    console.log("Arama:", word);
   };
+  useEffect(() => {
+    const storedSearches = localStorage.getItem("searchHistory");
+    if (storedSearches) {
+      setSearches(JSON.parse(storedSearches));
+    }
+  }, []);
 
+  const handleRemoveClick = (searchTerm) => {
+    const updatedSearches = searches.filter((term) => term !== searchTerm);
+    setSearches(updatedSearches);
+    localStorage.setItem("searchHistory", JSON.stringify(updatedSearches));
+  };
 
   return (
     <div className="container">
       <div className="d-flex">
-        {close && (
-          <button
-            style={{ borderColor: "black", borderRadius: "25px" }}
-            type="button"
-            className="btn btn-light"
-          >
-            son arama
-            <span
-              style={{ marginLeft: "5px" }}
-              className="btn-close"
-              onClick={closeHandler}
-            ></span>
-          </button>
-        )}
+        {searches.map((searchTerm, index) => (
+          <div key={index} className="d-flex align-items-center mb-2">
+            <button
+              style={{ borderColor: "black", borderRadius: "25px" }}
+              type="button"
+              className="btn btn-light"
+              onClick={() => handleSearch(searchTerm)}
+            >
+              {searchTerm}
+              <span
+                style={{ marginLeft: "5px" }}
+                className="btn-close"
+                onClick={() => handleRemoveClick(searchTerm)}
+              ></span>
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

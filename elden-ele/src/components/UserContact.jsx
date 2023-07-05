@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function UserContact({ data }) {
-  /* const { userId } = data; // gelen datada userId diye bir field var
-  const [userData, setUserData] = useState({});
+function UserContact() {
+  const [data, setData] = useState({});
+  const { id } = useParams();
   useEffect(() => {
-    // user bilgilerini çekmek için
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/getUser/${userId}`
-        );
-        const data = response.data;
-        console.log(data);
-        setUserData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchData();
-  }, [userId]);
-*/
+  });
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/get/${id}`);
+      const { userId } = response.data;
+
+      const userResponse = await axios.get(
+        `http://localhost:3000/getUser/${userId}`
+      );
+      const userData = userResponse.data;
+      setData(userData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div
@@ -35,7 +37,13 @@ function UserContact({ data }) {
         }}
         className="col-md-3"
       >
-        <h5 style={{ marginTop: "15px" }}></h5>
+        <h4 style={{ marginTop: "15px" }}>
+          {data.firstName} {data.lastName}
+        </h4>
+        <p>
+          <b>Kullanıcı Adı: </b>
+          {data.kullanici_adi}
+        </p>
 
         <Divider />
         <div
@@ -48,7 +56,8 @@ function UserContact({ data }) {
           }}
         >
           <p style={{ marginLeft: "10px" }}>
-            <b style={{ marginRight: "20px" }}>Cep</b>{" "}
+            <b style={{ marginRight: "20px" }}>Cep</b>
+            {data.phone}
           </p>
         </div>
       </div>

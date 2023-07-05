@@ -98,7 +98,11 @@ export default function Card({
   return (
     <CardContainer>
       <Link to={`/ilan/${_id}`} activeClassName="active-link">
-        <CardImage src={image} alt={title} />
+        <img
+          style={{ width: "100%", height: "200px", objectFit: "cover" }}
+          src={image}
+          alt={title}
+        />
       </Link>
       <CardContent>
         <div className="card-content">

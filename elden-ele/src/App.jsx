@@ -23,10 +23,7 @@ function App() {
         <Route exact path="/ilanekle" element={<NewAdvert />} />
         <Route exact path="/profile" element={<ProfilePage />} />
         <Route exact path="/ilanguncelle/:id" element={<UpdatePage />} />
-        <Route
-          path="/category"
-          element={<CategoriesPage categoryName={"Vasita"} />}
-        />
+        <Route path="/:categoryName" element={<CategoriesPage />} />
         <Route path="/ilan/:id" element={<Details />} />
         <Route exact path="/message" element={<MessageInterface />} />
         <Route exact path="/search" element={<ProductSearch />} />
