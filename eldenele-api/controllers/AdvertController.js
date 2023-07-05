@@ -8,13 +8,13 @@ const HomeAndGarden = require("../models/category_models/HomeAndGardenModel");
 const SecondHand = require("../models/category_models/SecondHandModel");
 const SparePart = require("../models/category_models/SparePartModel");
 
-const createImage = async (req, res) => {
-  const item = new Item(req.body);
-  try {
-    await item.save();
-    res.status(201).json(item);
-  } catch (error) {}
-};
+  const createImage = async (req, res) => {
+    const item = new Item(req.body);
+    try {
+      await item.save();
+      res.status(201).json(item);
+    } catch (error) {}
+  };
 
 //tüm resimleri çeker
 const getImages = async (req, res) => {
