@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Footer from "../components/Footer";
@@ -17,6 +17,7 @@ function NewAdvert() {
   //fotoğraf
   const [item, setItem] = useState(null);
 
+  // commonfield handles
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -32,7 +33,7 @@ function NewAdvert() {
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
-  //kategorilere göre alanları almak için
+
   const [car, setCar] = useState({
     marka: "",
     seri: "",
@@ -100,6 +101,7 @@ function NewAdvert() {
     takas: "evet",
   });
 
+  //Form alanları değiştiğinde çalışan Handle, form alanları doldurulurken çağrılır
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
 
