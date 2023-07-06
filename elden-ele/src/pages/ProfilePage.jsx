@@ -13,10 +13,11 @@ import { useParams } from "react-router-dom";
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState({});
   const [data, setData] = useState([]);
-  //*****************************************
+  const [currentCategory, setCurrentCategory] = useState("");
+
   //kullanıcı idsi
   const userId = localStorage.getItem("userId");
-  //*****************************************
+
   //kullanıcı bilgileri
   const fetchProfile = async () => {
     try {
@@ -26,6 +27,42 @@ const ProfilePage = () => {
       setProfileData(response.data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const fetchDataByCategory = async (categoryName) => {
+    console.log(categoryName, userId);
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/ilanlar/${categoryName}/${userId}`
+      );
+      if (response.status === 200) {
+        const ilanlar = response.data;
+        const ilanlarWithImages = await Promise.all(
+          ilanlar.map(async (ilan) => {
+            const imageResponse = await axios.get(
+              `http://localhost:3000/image/${ilan.image}`
+            );
+            if (imageResponse.status === 200) {
+              const images = imageResponse.data;
+              ilan.image = images;
+              return ilan;
+            } else {
+              console.error(
+                "Resim alınırken bir hata oluştu:",
+                imageResponse.statusText
+              );
+              return ilan;
+            }
+          })
+        );
+        setData(ilanlarWithImages);
+        setCurrentCategory(categoryName);
+      } else {
+        console.error("İlanlar alınamadı:", response.statusText);
+      }
+    } catch (error) {
+      console.error("İlanlar alınamadı:", error);
     }
   };
 
@@ -45,9 +82,8 @@ const ProfilePage = () => {
       });
   };
 
-  //***********************************************************************
   //kullanıcının yüklemiş olduğu ilanları çekme
-  const fetchData = async () => {
+  const fetchAllData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:3000/ilanlar/${userId}`
@@ -73,6 +109,7 @@ const ProfilePage = () => {
           })
         );
         setData(ilanlarWithImages);
+        setCurrentCategory("");
       } else {
         console.error("İlanlar alınamadı:", response.statusText);
       }
@@ -87,32 +124,9 @@ const ProfilePage = () => {
     return () => (window.onscroll = null);
   };
 
-  /*
-    const ListingCard = ({ id, title, image, price }) => {
-      const history = useHistory();
-      
-      const handleDelete = () => {
-        // İlanı silme işlemleri burada yapılır
-      };
-      
-      const handleUpdate = () => {
-        history.push('/update-page'); // UpdatePage sayfasına yönlendirme
-      };
-    
-      return (
-        <StyledListingCard>
-          <ListingImage src={image} alt={title} />
-          <ListingTitle>{title}</ListingTitle>
-          <ListingDescription>{price}</ListingDescription>
-          <DeleteButton onClick={handleDelete}>Sil</DeleteButton>
-          <UpdateButton onClick={handleUpdate}>Güncelle</UpdateButton>
-        </StyledListingCard>
-      );
-    };
-    */
   useEffect(() => {
     fetchProfile();
-    fetchData();
+    fetchAllData();
   }, []);
 
   return (
@@ -126,7 +140,9 @@ const ProfilePage = () => {
           <ProfileImage src={Image3} alt="Profile Image" />
           {/* kullanıcı bilgileri çekme */}
           <ProfileInfo>
-            <ProfileName>{profileData.firstName}</ProfileName>
+            <ProfileName>
+              {profileData.firstName} {profileData.lastName}
+            </ProfileName>
             <ProfileDescription>{profileData.email}</ProfileDescription>
           </ProfileInfo>
 
@@ -136,11 +152,76 @@ const ProfilePage = () => {
                 <AboutSection>
                   <h4>Hakkımızda</h4>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam consectetur odio eget tellus feugiat dapibus.
+                    {profileData.kullanici_adi}
+                    <br />
+                    E-Mail: {profileData.email}
+                    <br />
+                    Telefon Numarası: {profileData.phone}
                   </p>
                 </AboutSection>
-                <SearchButton>Mağazada Ara</SearchButton>
+                <SearchButton data-bs-toggle="collapse" href="#collapseExample">
+                  Mağazada Ara
+                </SearchButton>
+                <div className="collapse" id="collapseExample">
+                  <div className=" d-flex flex-column">
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === ""}
+                      onClick={fetchAllData}
+                    >
+                      Tümü
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "Emlak"}
+                      onClick={() => fetchDataByCategory("Emlak")}
+                    >
+                      Emlak
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "Vasita"}
+                      onClick={() => fetchDataByCategory("Vasita")}
+                    >
+                      Vasıta
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "EvBahce"}
+                      onClick={() => fetchDataByCategory("EvBahce")}
+                    >
+                      Ev & Bahçe
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "Elektronik"}
+                      onClick={() => fetchDataByCategory("Elektronik")}
+                    >
+                      Elektronik
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "Moda"}
+                      onClick={() => fetchDataByCategory("Moda")}
+                    >
+                      Moda
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "YedekParca"}
+                      onClick={() => fetchDataByCategory("YedekParca")}
+                    >
+                      Yedek Parça
+                    </UpdateButton>
+                    <UpdateButton
+                      style={{ marginTop: "10px" }}
+                      active={currentCategory === "IkinciEl"}
+                      onClick={() => fetchDataByCategory("IkinciEl")}
+                    >
+                      İkinci El
+                    </UpdateButton>
+                  </div>
+                </div>
               </Sidebar>
             </div>
 

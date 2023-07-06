@@ -44,4 +44,9 @@ router.get("/image/:id", advertController.getImage);
 router.get("/:categoryName", advertController.getByCategory);
 //resim yükleme
 router.post("/image", advertController.createImage);
+//kategoriye göre kullanıcı ilanlarını listeleme
+router.get(
+  "/ilanlar/:categoryName/:id",
+  advertController.getUsersAdvertsByCategory
+);
 module.exports = router;
