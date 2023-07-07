@@ -32,7 +32,7 @@ router.get("/get/:id", advertController.getAdvert);
 router.post("/newadd", advertController.newAdvert);
 //ilan silme
 router.delete("/delete/:id", advertController.deleteAdvert);
-//ilan güncelleme(güncellenmedi henüz)
+//ilan güncelleme
 router.put("/update/:id", advertController.updateAdvert);
 //kullanıcının ilanlarını getirme
 router.get("/ilanlar/:id", advertController.getUsersAdverts);

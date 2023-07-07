@@ -285,7 +285,7 @@ const UpdatePage = () => {
       price: price,
       status: status,
       categoryName: categoryName,
-      image: item.id,
+      
     };
 
     const newCarAdvert = {
@@ -1139,7 +1139,7 @@ const UpdatePage = () => {
               />
             </FormGroup>
 
-            <FormGroup>
+            {/* <FormGroup>
               <Label htmlFor="images">Görseller</Label>
 
               <FileBase64
@@ -1147,7 +1147,7 @@ const UpdatePage = () => {
                 multiple={false}
                 onDone={({ base64 }) => setItem(base64)}
               />
-            </FormGroup>
+            </FormGroup> */}
 
             <ButtonContainer>
               <CancelButton type="button">İptal</CancelButton>
@@ -1156,7 +1156,7 @@ const UpdatePage = () => {
           </Form>
         </FormContainer>
       </Container>
-      <Footer />
+      <Footer/>
     </>
   );
 };

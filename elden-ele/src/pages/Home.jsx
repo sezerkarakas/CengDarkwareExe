@@ -27,7 +27,7 @@ function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/getAll");
+      const response = await fetch("http://localhost:3000/getAll");
       if (response.ok) {
         const adverts = await response.json();
         const advertsWithImages = await fetchImagesForAds(adverts);

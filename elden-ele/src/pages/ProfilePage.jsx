@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import Image1 from "../assets/ilan1.jpg";
-import Image2 from "../assets/ilan2.jpg";
 import Image3 from "../assets/ProfileImage.jpg";
 import Image4 from "../assets/BackImage.jpg";
 import Footer from "../components/Footer";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState({});
@@ -82,6 +79,7 @@ const ProfilePage = () => {
       .catch((error) => {
         console.error("İlan silinirken bir hata oluştu:", error);
       });
+    alert("İlan silindi!");
   };
 
   //kullanıcının yüklemiş olduğu ilanları çekme
@@ -118,6 +116,11 @@ const ProfilePage = () => {
     } catch (error) {
       console.error("İlanlar alınamadı:", error);
     }
+  };
+
+  const linkStyle = {
+    color: "inherit",
+    textDecoration: "none",
   };
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -226,15 +229,21 @@ const ProfilePage = () => {
                 </div>
               </Sidebar>
             </div>
-
-            <div className="col-md-9">
+            <div className="col-md-1"></div>
+            <div className="col-md-8">
               <h4>İlanlarım</h4>
               <ListingsContainer className="d-flex justify-content-between">
                 {data.map((item) => (
                   <ListingCard key={item._id}>
-                    <ListingImage src={item.image.image} alt={item.title} />
-                    <ListingTitle>{item.title}</ListingTitle>
-                    <ListingDescription>{item.price}</ListingDescription>
+                    <Link
+                      style={linkStyle}
+                      to={`/ilan/${item._id}`}
+                      activeClassName="active-link"
+                    >
+                      <ListingImage src={item.image.image} alt={item.title} />
+                      <ListingTitle>{item.title}</ListingTitle>
+                      <ListingDescription>{item.price}</ListingDescription>
+                    </Link>
                     <DeleteButton onClick={() => ilaniSil(item._id)}>
                       Sil
                     </DeleteButton>
