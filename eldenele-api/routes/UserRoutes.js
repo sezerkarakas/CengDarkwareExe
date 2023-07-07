@@ -46,7 +46,7 @@ router.get("/:categoryName", advertController.getByCategory);
 router.post("/image", advertController.createImage);
 //kategoriye göre kullanıcı ilanlarını listeleme
 router.get(
-  "/ilanlar/:categoryName/:id",
+  "/ilanlar/:id/:categoryName",
   advertController.getUsersAdvertsByCategory
 );
 module.exports = router;

@@ -80,12 +80,19 @@ const getUsersAdverts = async (req, res) => {
     res.status(500).send("İlanlar alınırken bir hata oluştu.");
   }
 };
-
 const getUsersAdvertsByCategory = async (req, res) => {
   try {
-    const { categoryName, id } = req.params;
-    const adverts = await Advert.find({ categoryName, id });
-    res.json(adverts);
+    const { id, categoryName } = req.params;
+    const userId = id;
+    // Kullanıcının ilanlarını çekmek için findById fonksiyonunu kullanın
+    const userAdverts = await Advert.find({userId: userId});
+
+    // Kategoriye göre ilanları filtrelemek için Array.filter() kullanın
+    const advertsByCategory = userAdverts.filter(
+      (advert) => advert.categoryName === categoryName
+    );
+
+    res.json(advertsByCategory);
   } catch (error) {
     console.error("İlanlar alınamadı:", error);
     res.status(500).json({ error: "İlanlar alınamadı" });
@@ -213,5 +220,5 @@ module.exports = {
   getImage,
   newAdvert,
   getByCategory,
-  getUsersAdvertsByCategory
+  getUsersAdvertsByCategory,
 };

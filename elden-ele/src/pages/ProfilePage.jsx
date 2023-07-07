@@ -34,7 +34,7 @@ const ProfilePage = () => {
     console.log(categoryName, userId);
     try {
       const response = await axios.get(
-        `http://localhost:3000/ilanlar/${categoryName}/${userId}`
+        `http://localhost:3000/ilanlar/${userId}/${categoryName}`
       );
       if (response.status === 200) {
         const ilanlar = response.data;
@@ -56,6 +56,8 @@ const ProfilePage = () => {
             }
           })
         );
+        console.log(response.data);
+        console.log(ilanlarWithImages);
         setData(ilanlarWithImages);
         setCurrentCategory(categoryName);
       } else {

@@ -31,7 +31,7 @@ function UserContact() {
         style={{
           border: "1px solid #dbdbdb",
           backgroundColor: "silver",
-          height: "110px",
+          height: "100%",
           boxSizing: "inherit",
           borderRadius: "10px",
         }}
@@ -53,6 +53,7 @@ function UserContact() {
             marginTop: "10px",
             border: "2px solid grey",
             borderRadius: "5px",
+            marginBottom: "10px",
           }}
         >
           <p style={{ marginLeft: "10px" }}>

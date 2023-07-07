@@ -18,6 +18,12 @@ export default function Navbar({ isScrolled, handleSearch }) {
     handleSearch(word);
   };
 
+  const handleKeyUp = (e) => {
+    if (e.key === 'Enter') {
+      onSearch(e.target.value)
+    }
+  }
+
   useEffect(() => {
     const handleResize = () => {
       setIsWindowSmall(window.innerWidth < 900);
@@ -169,7 +175,8 @@ export default function Navbar({ isScrolled, handleSearch }) {
               placeholder="Ara"
               onFocus={() => setShowSearch(true)}
               onBlur={() => setShowSearch(false)}
-              onChange={(e) => onSearch(e.target.value)}
+              
+              onKeyUp={(e) => handleKeyUp(e)}
             />
             <button onClick={handleSignOut}>
               <FaPowerOff />

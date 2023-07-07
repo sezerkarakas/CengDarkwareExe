@@ -21,6 +21,7 @@ function Home() {
   const [searches, setSearches] = useState([]);
 
   useEffect(() => {
+    console.log(localStorage.getItem("searchHistory"));
     fetchData();
   }, []);
 
@@ -77,6 +78,14 @@ function Home() {
     setAds(res);
   };
 
+  const getSearchHistory = () => {
+    const searchHistory = localStorage.getItem("searchHistory");
+    if (searchHistory) {
+      return JSON.parse(searchHistory);
+    }
+    return [];
+  };
+
   const handleSearch = async (word) => {
     if (word === "") {
       getAllAds();
@@ -84,7 +93,7 @@ function Home() {
     } else {
       try {
         const res = await fetchData();
-        const updatedSearches = [...searches, word];
+        const updatedSearches = [...getSearchHistory(), word];
         setSearches(updatedSearches);
         localStorage.setItem("searchHistory", JSON.stringify(updatedSearches));
         const filteredAds = res.filter((ad) =>
@@ -93,7 +102,7 @@ function Home() {
         setAds(filteredAds);
         setSearchWord(word);
         if (filteredAds.length === 0) {
-          toast.warning("Aradığınız sonuç bulundamadı.");
+          toast.warning("Aradığınız sonuç bulunamadı.");
         }
       } catch (error) {
         console.log(error);
