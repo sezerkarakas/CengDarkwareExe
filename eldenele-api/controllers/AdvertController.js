@@ -155,7 +155,7 @@ const deleteAdvert = async (req, res) => {
   }
 };
 
-//ilan güncelleme(mükemmel ötesi güzeller güzeli dünyada dengi olmayan güzelim bitanem büşram yazdı)
+//ilan güncelleme
 const updateAdvert = async (req, res) => {
   const item = new Item(req.body);
   try {
